@@ -1,0 +1,57 @@
+---
+interface Props {
+  name: string;
+  education: string;
+  bio: string;
+  email: string;
+  github: string;
+  phone: string;
+  linkedin: string;
+}
+
+const { name, education, bio, email, github, phone, linkedin } = Astro.props;
+---
+
+<div class="p-6 mb-6">
+  
+  <div class="ml-4">
+    <pre class="text-[#90B99F] font-bold mb-4 text-xs leading-3">
+ █████╗ ██████╗ ██╗  ██╗██╗███╗   ██╗ █████╗ ███╗   ██╗██████╗  █████╗ ███╗   ██╗   ███████╗██╗   ██╗██████╗ ██╗  ██╗ █████╗ ██████╗ ███████╗ █████╗ ███╗   ██╗
+██╔══██╗██╔══██╗██║  ██║██║████╗  ██║██╔══██╗████╗  ██║██╔══██╗██╔══██╗████╗  ██║   ██╔════╝██║   ██║██╔══██╗██║  ██║██╔══██╗██╔══██╗██╔════╝██╔══██╗████╗  ██║
+███████║██████╔╝███████║██║██╔██╗ ██║███████║██╔██╗ ██║██║  ██║███████║██╔██╗ ██║   ███████╗██║   ██║██║  ██║███████║███████║██████╔╝███████╗███████║██╔██╗ ██║
+██╔══██║██╔══██╗██╔══██║██║██║╚██╗██║██╔══██║██║╚██╗██║██║  ██║██╔══██║██║╚██╗██║   ╚════██║██║   ██║██║  ██║██╔══██║██╔══██║██╔══██╗╚════██║██╔══██║██║╚██╗██║
+██║  ██║██████╔╝██║  ██║██║██║ ╚████║██║  ██║██║ ╚████║██████╔╝██║  ██║██║ ╚████║   ███████║╚██████╔╝██████╔╝██║  ██║██║  ██║██║  ██║███████║██║  ██║██║ ╚████║
+╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝   ╚══════╝ ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝
+    </pre>
+    <p class="text-lg mb-3 text-[#E6B99D]">{education}</p>
+    <p class="text-sm leading-relaxed text-[#C9C7CD]">
+      {bio}
+    </p>
+  </div>
+  <div class="mt-6 ml-4 flex gap-6 text-xs items-center">
+    <a
+      href={`mailto:${email}`}
+      class="px-6 py-2 border border-[#90B99F] rounded hover:bg-[#90B99F] hover:text-black transition font-bold whitespace-nowrap"
+    >
+      [ mail ]
+    </a>
+    <a
+      href={`tel:${phone}`}
+      class="px-6 py-2 border border-[#90B99F] rounded hover:bg-[#90B99F] hover:text-black transition font-bold whitespace-nowrap"
+    >
+      [ phone ]
+    </a>
+    <a
+      href={github}
+      class="px-6 py-2 border border-[#90B99F] rounded hover:bg-[#90B99F] hover:text-black transition font-bold whitespace-nowrap"
+    >
+      [ github ]
+    </a>
+    <a
+      href={linkedin}
+      class="px-6 py-2 border border-[#90B99F] rounded hover:bg-[#90B99F] hover:text-black transition font-bold whitespace-nowrap"
+    >
+      [ linkedin ]
+    </a>
+  </div>
+</div>

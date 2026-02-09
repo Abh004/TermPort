@@ -1,0 +1,41 @@
+# dependencies
+node_modules/
+.npm/
+
+# runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# coverage
+coverage/
+.nyc_output/
+
+# Astro
+dist/
+.astro/
+
+# production
+build/
+
+# misc
+*.swp
+*.swo
+*~
+.DS_Store
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Backups
+*.bak

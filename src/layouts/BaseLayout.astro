@@ -1,0 +1,64 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Abhinandan | Portfolio" } = Astro.props;
+import StatusBar from '../components/StatusBar.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="flex flex-col h-screen bg-[#131314] text-[#ACA1CF] font-mono">
+    <main class="flex-grow flex items-start justify-start p-6 overflow-y-auto">
+      <slot />
+    </main>
+    <StatusBar file="~/portfolio/index.astro" mode="Insert" />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    --color-bg: #131314;
+    --color-text: #ACA1CF;
+    --color-border: #3E3E43;
+    --color-prompt: #90B99F;
+    --color-command: #E29ECA;
+    --color-accent: #F5A191;
+    --color-muted: #9998A8;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  a {
+    color: var(--color-prompt);
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  a:hover {
+    text-shadow: 0 0 5px var(--color-prompt);
+  }
+</style>

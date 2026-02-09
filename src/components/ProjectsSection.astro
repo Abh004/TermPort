@@ -1,0 +1,43 @@
+---
+import ProjectCard from './ProjectCard.astro';
+
+const projects = [
+  {
+    name: 'drwxr-xr-x biometric-watermarking/',
+    tools: 'Python | PyTorch | GANs',
+    description: 'Deep learning system designed to combat audio deepfakes using CNN-based biometric hashes.',
+    repo: 'https://github.com/LilRag/Hybrid-Audio-Verification-via-Biometric-Watermarking'
+  },
+  {
+    name: 'drwxr-xr-x metro-econometrics/',
+    tools: 'Python | Scikit-Learn',
+    description: 'Geospatial pipeline modeling property values with a Gradient Boosting Regressor (R²=0.82).',
+    repo: 'https://github.com/Abh004/Bengaluru-Metro-Spatial-Econometrics'
+  },
+  {
+    name: 'drwxr-xr-x retail-management/',
+    tools: 'PostgreSQL | Express.js | Node.js',
+    description: 'Full-stack platform for inventory automation and real-time stock tracking.',
+    repo: 'https://github.com/Abh004/electronics-retail-dbms'
+  },
+  {
+    name: 'drwxr-xr-x Dotfiles/',
+    tools: 'Lua | toml | json',
+    description: 'A Neovim environment featuring a custom Lua config and a terminal workflow powered by Starship.',
+    repo: 'https://github.com/Abh004/Dotfiles'
+  }
+];
+---
+
+<div class="mb-6 ml-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {projects.map(project => (
+      <ProjectCard 
+        name={project.name} 
+        tools={project.tools} 
+        description={project.description}
+        repo={project.repo}
+      />
+    ))}
+  </div>
+</div>

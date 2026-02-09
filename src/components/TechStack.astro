@@ -1,0 +1,115 @@
+---
+const techStack = {
+  languages: ["Python", "C", "C++", "JavaScript", "Java", "Lua", "Kotlin"],
+  databases: ["MySQL", "PostgreSQL", "MongoDB", "Redis", "Neo4j"],
+  ml_and_data_analysis: ["PyTorch", "Numpy", "Pandas", "Matplotlib", "TensorFlow", "BeautifulSoup", "Scikit-Learn"],
+  web_and_mobile: ["React", "Node.js", "Express.js", "Android Studio", "REST API"],
+};
+
+const proficiency = {
+  proficient: new Set([
+    "Python",
+    "C",
+    "MySQL",
+    "PyTorch",
+    "Numpy",
+    "Pandas",
+    "Matplotlib",
+    "React",
+    "Node.js",
+    "Express.js"
+  ]),
+  advanced: new Set([
+    "JavaScript",
+    "C++",
+    "PostgreSQL",
+    "MongoDB",
+    "Android Studio",
+    "TensorFlow",
+    "Java"
+  ])
+};
+
+const techStackEntries = Object.entries(techStack);
+const formatValue = (name) => {
+  const level = proficiency.proficient.has(name)
+    ? 'proficient'
+    : (proficiency.advanced.has(name) ? 'advanced' : 'intermediate');
+  return `"<span class=\"tech-value tech-${level}\">${name}</span>"`;
+};
+
+const formattedLines = techStackEntries.map(([key, values], index) => {
+  const jsonValues = `[${values.map(formatValue).join(', ')}]`;
+  const comma = index < techStackEntries.length - 1 ? ',' : '';
+  return `  "<span class=\"tech-key\">${key}</span>": ${jsonValues}${comma}`;
+});
+const formattedJson = `{
+${formattedLines.join('\n')}
+}`;
+---
+
+<div class="p-6 mb-6">
+  <pre class="text-sm ml-4 text-gray-300 tech-stack-json" set:html={formattedJson}></pre>
+  <div class="tech-legend">
+    <span class="legend-item"><span class="legend-swatch swatch-proficient"></span>Proficient</span>
+    <span class="legend-item"><span class="legend-swatch swatch-advanced"></span>Advanced</span>
+    <span class="legend-item"><span class="legend-swatch swatch-intermediate"></span>Intermediate</span>
+  </div>
+</div>
+
+<style>
+  :global(.tech-stack-json .tech-key) {
+    color: #ACA1CF;
+  }
+
+  :global(.tech-stack-json .tech-value.tech-proficient) {
+    color: #90B99F;
+  }
+
+  :global(.tech-stack-json .tech-value.tech-advanced) {
+    color: #F0C5A9;
+  }
+
+  :global(.tech-stack-json .tech-value.tech-intermediate) {
+    color: #ea8383;
+  }
+
+  .tech-stack-json {
+    margin-bottom: 1.5rem;
+  }
+
+  .tech-legend {
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    color: #C9C7CD;
+  }
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .legend-swatch {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 9999px;
+    display: inline-block;
+  }
+
+  .swatch-proficient {
+    background: #90B99F;
+  }
+
+  .swatch-advanced {
+    background: #F0C5A9;
+  }
+
+  .swatch-intermediate {
+    background: #ea8383;
+  }
+</style>

@@ -1,0 +1,36 @@
+---
+interface Props {
+  name: string;
+  tools: string;
+  description: string;
+  repo: string;
+}
+
+const { name, tools, description, repo } = Astro.props;
+
+// Split the name (e.g., "drwxr-xr-x biometric-watermarking/") into parts
+const parts = name.split(' ');
+const permissions = parts[0]; // "drwxr-xr-x"
+const folderName = parts.slice(1).join(' '); // "biometric-watermarking/"
+---
+
+<style>
+  .project-card:hover,
+  .project-card:hover * {
+    text-shadow: none;
+  }
+</style>
+
+<a
+  class="project-card group block bg-[#1a1a1c] p-4 mb-2 hover:bg-[#131314] transition-colors duration-600"
+  href={repo}
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  <div class="text-base mb-1 font-bold">
+    <span class="text-[#C1C0D4] group-hover:text-white transition-colors duration-200">{permissions}</span>
+    <span class="text-[#E6B99D] group-hover:text-white transition-colors duration-200">{folderName}</span>
+  </div>
+  <p class="text-xs mb-2 font-semibold text-[#9998A8] group-hover:text-white transition-colors duration-200">{tools}</p>
+  <p class="text-sm text-[#C9C7CD] group-hover:text-white transition-colors duration-200">{description}</p>
+</a>

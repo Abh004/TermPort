@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Terminal from '../components/Terminal.astro';
+import StatusBar from '../components/StatusBar.astro';
+---
+
+<BaseLayout title="Abhinandan | Portfolio">
+  <div class="w-full flex flex-col min-h-screen">
+
+    <main class="flex-grow flex items-start justify-start p-6">
+      <Terminal />
+    </main>
+  </div>
+</BaseLayout>

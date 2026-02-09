@@ -1,0 +1,23 @@
+---
+interface Props {
+  mode?: string;
+  file?: string;
+}
+
+const { mode = "Normal", file = "~/portfolio/index.astro" } = Astro.props;
+---
+
+<div class="w-full flex text-sm h-8 items-center font-medium">
+  <div class="bg-[#EA83A5] text-[#131314] px-3 uppercase font-bold">
+    {mode}
+  </div>
+  <div class="bg-[#3E3E43] text-[#C9C7CD] px-3 flex-grow">
+    {file}
+  </div>
+  <div class="bg-[#3E3E43] text-[#C7C9CD] px-3">
+    UTF-8
+  </div>
+  <div class="bg-[#EA83A5] text-[#131314] px-3 font-bold">
+    1,1 100%
+  </div>
+</div>

@@ -1,0 +1,23 @@
+{
+  "name": "portfolio",
+  "version": "0.0.1",
+  "description": "Abhinandan's portfolio built with Astro and Tailwind CSS",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "keywords": [],
+  "author": "Abhinandan Sudharsan",
+  "license": "MIT",
+  "dependencies": {
+    "astro": "^4.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/tailwind": "^5.0.0",
+    "tailwindcss": "^3.3.0"
+  }
+}

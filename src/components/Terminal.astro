@@ -1,0 +1,232 @@
+---
+import ProjectsSection from './ProjectsSection.astro';
+import TechStack from './TechStack.astro';
+import Header from './Header.astro';
+import DATA_STORE from '../data/terminalContent';
+import { FILE_LIST } from '../data/terminalContent';
+---
+
+<style>
+  .terminal-wrap { background:#131314; color:#C9C7CD; font-family: 'IBM Plex Mono', monospace; width:100%; height:100%; display:flex; flex-direction:column; }
+  .terminal-container { flex:1; overflow-y:auto; padding:1rem; }
+  .prompt { color:#90B99F; }
+  .command { color:#E29ECA; }
+  .path { color:#90B99F; }
+  .output pre { white-space: pre-wrap; margin:0; }
+  .output > div { margin-bottom: 0.75rem; }
+  #terminal-input { border: none; outline: none; background: transparent; color: inherit; padding: 0; margin: 0; width: 100%; }
+  .input-row { display:flex; gap:0.5rem; align-items:flex-start; }
+  .input-row .text-white { margin-left:0; }
+  .input-section { padding:0 1rem 1rem 1rem; }
+</style>
+
+<div class="terminal-wrap">
+  <div class="terminal-container">
+    <div id="terminal-output" class="output"></div>
+  </div>
+
+  <div class="input-section">
+    <div class="input-row">
+      <span class="prompt">root@portfolio</span>
+      <span class="text-white">:</span>
+      <span class="path">~</span>
+      <span class="text-white">$</span>
+      <input id="terminal-input" class="text-sm" autocomplete="off" spellcheck="false" />
+    </div>
+  </div>
+
+  <!-- Pre-rendered projects section hidden for dynamic injection -->
+  <div id="projects-section-template" style="display:none;">
+    <ProjectsSection />
+  </div>
+
+  <!-- Pre-rendered tech stack section hidden for dynamic injection -->
+  <div id="tech-stack-template" style="display:none;">
+    <TechStack />
+  </div>
+
+  <!-- Pre-rendered whoami section hidden for dynamic injection -->
+  <div id="whoami-section-template" style="display:none;">
+    <Header 
+      name="Abhinandan Sudharsan"
+      education="B.Tech CSE & AIML @ PES University"
+      bio="Hey! I’m a tech enthusiast and developer from Bengaluru, currently navigating my 6th semester at PES University with a focus on AI/ML. I’ve architected 10+ projects over the last two years—ranging from audio biometric watermarking with GANs to geospatial modeling—which you can explore via cat projects.txt or on my GitHub. My passion lies in the 'low-level' grit: building robust backend architectures, mastering database concurrency, and exploring the fascinating intricacies of compiler design. I’m a chronic Linux ricer who loves the endless customizability of a terminal-centric workflow, always seeking the perfect balance between high-level AI and system-level efficiency. I thrive on building, breaking, and refactoring complex systems, and I’m always down to dive into a new technical rabbit hole."
+      email="abhinandan.sudharsan29@gmail.com"
+      github="https://github.com/Abh004"
+      phone="9880833155"
+      linkedin="https://linkedin.com/in/abhinandan-sudharsan"
+    />
+  </div>
+  
+  <!-- Embed DATA_STORE and FILE_LIST for client code to consume without dynamic import -->
+  <div id="data-store" style="display:none" data-json={JSON.stringify(DATA_STORE)} data-list={JSON.stringify(FILE_LIST)}></div>
+</div>
+
+<script type="module" client:load>
+  const ds = document.getElementById('data-store');
+  const DATA = ds ? JSON.parse(ds.dataset.json || '{}') : {};
+  const FILES = ds ? JSON.parse(ds.dataset.list || '[]') : [];
+
+  const out = document.getElementById('terminal-output');
+  const input = document.getElementById('terminal-input');
+  const projectsTemplate = document.getElementById('projects-section-template');
+  const techStackTemplate = document.getElementById('tech-stack-template');
+  const whoamiTemplate = document.getElementById('whoami-section-template');
+  const container = document.querySelector('.terminal-container');
+
+  let history = [];
+  let hIndex = -1;
+
+  function printLine(text, cls) {
+    const el = document.createElement('div');
+    el.className = cls || '';
+    const pre = document.createElement('pre');
+    pre.textContent = text;
+    el.appendChild(pre);
+    out.appendChild(el);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function printBlankLine() {
+    const el = document.createElement('div');
+    el.innerHTML = '<pre> </pre>';
+    out.appendChild(el);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function printHTML(html) {
+    const el = document.createElement('div');
+    el.innerHTML = html;
+    out.appendChild(el);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function runCommand(raw) {
+    if (!raw.trim()) return;
+    history.push(raw);
+    hIndex = history.length;
+
+    const parts = raw.trim().split(/\s+/);
+    const cmd = parts[0];
+    const arg = parts.slice(1).join(' ');
+
+    printHTML(`<pre style="font-size: 0.875rem;"><span style="color:#90B99F;">root@portfolio</span><span class="text-white">:</span><span style="color:#90B99F;">~</span><span class="text-white">$</span> ${raw}</pre>`);
+
+    if (cmd === 'help') {
+      printLine(DATA['help.txt']);
+    } else if (cmd === 'ls') {
+      FILES.forEach(f => printLine(f));
+    } else if (cmd === 'cat') {
+      if (!arg) { printLine('cat: missing file operand'); return; }
+      const name = arg.trim();
+      if (!(name in DATA)) { printLine(`cat: ${name}: No such file`); return; }
+      const content = DATA[name];
+      if (content === '__RENDER_PROJECTS_SECTION__') {
+        // leave a blank line separating the command and the projects output
+        printBlankLine();
+
+        // measure the printed command's path offset so the projects align under the path
+        const lastOut = out.lastElementChild; // this is the command we just printed
+        let pathOffset = 0;
+        if (lastOut) {
+          const pathSpan = lastOut.querySelector('.path');
+          if (pathSpan) {
+            const outRect = out.getBoundingClientRect();
+            const pathRect = pathSpan.getBoundingClientRect();
+            pathOffset = Math.max(0, Math.round(pathRect.left - outRect.left));
+          }
+        }
+
+        // create a wrapper for the projects HTML and apply left margin to align under path
+        const wrapper = document.createElement('div');
+        wrapper.style.marginLeft = pathOffset + 'px';
+        wrapper.innerHTML = projectsTemplate.innerHTML;
+        out.appendChild(wrapper);
+      } else if (content === '__RENDER_TECH_STACK__') {
+        if (techStackTemplate) {
+          printHTML(techStackTemplate.innerHTML);
+        } else {
+          printLine('tech_stack.json: render template missing');
+        }
+      } else {
+        printLine(content);
+      }
+    } else if (cmd === 'clear') {
+      out.innerHTML = '';
+    } else if (cmd === 'whoami') {
+      if (whoamiTemplate) {
+        printHTML(whoamiTemplate.innerHTML);
+      } else {
+        printLine('guest');
+      }
+    } else {
+      printLine(`${cmd}: command not found`);
+    }
+    printBlankLine();
+  }
+
+  // Boot sequence
+  const bootLines = ['Initializing kernel...', 'Loading modules...', 'Mounting filesystem...', 'Starting terminal...'];
+  const asciiArt = [
+    "___.   .__             /\\       ___.   .__     ",
+    "\\_ |__ |__| ____      / / _____ \\_ |__ |  |__  ",
+    " | __ \\|  |/    \\    / /  \\__  \\ | __ \\|  |  \\ ",
+    " | \\_\\ \\  |   |  \\  / /    / __ \\| \\_\\ \\   Y  \\",
+    " |___  /__|___|  / / /    (____  /___  /___|  /",
+    "     \\/        \\/  \\/          \\/    \\/     \\/ "
+  ];
+  (async () => {
+    for (const line of asciiArt) {
+      printLine(line);
+      await new Promise(r => setTimeout(r, 600));
+    }
+    printBlankLine();
+
+    for (const line of bootLines) {
+      printLine(line);
+      await new Promise(r => setTimeout(r, 350));
+    }
+    printLine(DATA['welcome.txt']);
+    printLine("Type 'help' to see available commands.");
+    input.focus();
+    printBlankLine();
+  })();
+
+  // Keyboard handling
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const val = input.value;
+      runCommand(val);
+      input.value = '';
+      e.preventDefault();
+    } else if (e.key === 'ArrowUp') {
+      if (history.length === 0) return;
+      hIndex = Math.max(0, hIndex - 1);
+      input.value = history[hIndex] || '';
+      e.preventDefault();
+    } else if (e.key === 'ArrowDown') {
+      if (history.length === 0) return;
+      hIndex = Math.min(history.length, hIndex + 1);
+      if (hIndex === history.length) input.value = '';
+      else input.value = history[hIndex] || '';
+      e.preventDefault();
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      const val = input.value;
+      const token = val.split(/\s+/).pop();
+      if (!token) return;
+      const matches = FILES.filter(f => f.startsWith(token));
+      if (matches.length === 1) {
+        // replace last token with match
+        const parts = val.split(/\s+/);
+        parts[parts.length -1] = matches[0];
+        input.value = parts.join(' ');
+      } else if (matches.length > 1) {
+        printLine(matches.join('  '));
+      }
+    }
+  });
+
+  // Click to focus input
+  document.querySelector('.terminal-wrap').addEventListener('click', () => input.focus());
+</script>
