@@ -7,9 +7,10 @@ interface Props {
   github: string;
   phone: string;
   linkedin: string;
+  resume: string;
 }
 
-const { name, education, bio, email, github, phone, linkedin } = Astro.props;
+const { name, education, bio, email, github, phone, linkedin, resume } = Astro.props;
 ---
 
 <div class="p-6 mb-6">
@@ -52,6 +53,12 @@ const { name, education, bio, email, github, phone, linkedin } = Astro.props;
       class="px-6 py-2 border border-[#90B99F] rounded hover:bg-[#90B99F] hover:text-black transition font-bold whitespace-nowrap"
     >
       [ linkedin ]
+    </a>
+    <a
+      href={resume}
+      class="px-6 py-2 border border-[#90B99F] rounded hover:bg-[#90B99F] hover:text-black transition font-bold whitespace-nowrap"
+    >
+      [ resume ]
     </a>
   </div>
 </div>
